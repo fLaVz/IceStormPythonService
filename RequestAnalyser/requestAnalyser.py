@@ -43,6 +43,6 @@ class Analyzer():
         print(self.song)
 
         #server launch:
-        #export FLASK_APP=Analyzer.py
+        #export FLASK_APP=requestAnalyzer.py
         #flask run
         #curl --data "phrase=play California love" http://127.0.0.1:5000

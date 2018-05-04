@@ -15,8 +15,7 @@ import mp3App
 
 class ServerI(mp3App.Function):
 
-    songs = "sub1"
-
+    songs = "sub2"
     def playMusic(self, music, current=None):
         print(self.songs)
 
@@ -26,7 +25,7 @@ def run(communicator):
     batch = False
     option = "Twoway"
     topicName = "mp3App"
-    id = "1"
+    id = "2"
     retryCount = "1"
 
     if batch and (option in ("Twoway", "Ordered")):
