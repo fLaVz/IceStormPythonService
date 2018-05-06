@@ -4,26 +4,38 @@ import IceStorm
 import time
 import json
 
+from os import listdir
+from os.path import isfile, join
+
 Ice.loadSlice('server.ice')
 import mp3App
+import metaServer
 
 
-class ServerI(mp3App.Function):
+class MetaServerI(metaServer.msFunction):
+
+    musicList = ["test1.mp3", "test2.mp3"]
+
+    def __init__(self):
+        action = "init"
+        print("init")
 
 
-    def playMusic(self, data, current=None):
+    def parse(self, data, action, current=None):
         #print(data['action'])
         #print(data['song'])
+        print("parsing....  -> " + data)
+
         with Ice.initialize(sys.argv, "config.pub") as communicator:
-            status = ServerI.run(communicator)
+            status = MetaServerI.run(self, communicator, action, data)
 
-    def receivePlaylist(self, current=None):
-        pl = ["test1", "test2"]
-        return pl
+    def receive(self, current=None):
+        print("reveiveLOLOLOLOLOLOLOLOL")
+        return self.musicList
 
-    def run(communicator):
+    def run(self, communicator, action, data):
+
         topicName = "mp3App"
-
         manager = IceStorm.TopicManagerPrx.checkedCast(communicator.propertyToProxy('TopicManager.Proxy'))
         if not manager:
             print("invalid proxy")
@@ -41,6 +53,7 @@ class ServerI(mp3App.Function):
                 print("temporary error. try again")
                 sys.exit(1)
 
+
         #
         # Get the topic's publisher object, and create a Clock proxy with
         # the mode specified as an argument of this application.
@@ -50,8 +63,14 @@ class ServerI(mp3App.Function):
         mp3 = mp3App.FunctionPrx.uncheckedCast(publisher)
 
         try:
-            mp3.playMusic("hello")
-            time.sleep(1)
+            if action == "init":
+                print("init")
+                self.musicList = ["test1", "test2"]
+            elif action == "play":
+                mp3.playMusic(data)
+            elif action == "stop":
+                mp3.stopMusic()
+
         except IOError:
             pass
         except Ice.CommunicatorDestroyedException:
@@ -66,7 +85,7 @@ class ServerI(mp3App.Function):
 
 with Ice.initialize(sys.argv) as communicator:
     adapter = communicator.createObjectAdapterWithEndpoints("Function", "tcp -h 127.0.0.1 -p 4061")
-    object = ServerI()
+    object = MetaServerI()
     adapter.add(object, communicator.stringToIdentity("server"))
     adapter.activate()
     communicator.waitForShutdown()

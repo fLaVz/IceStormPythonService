@@ -8,8 +8,11 @@
 
 module metaServer
 {
+    sequence<string> playList;
+
     interface msFunction
     {
-        void playMusic(string data);
+        void parse(string data, string action);
+        playList receive();
     };
 };
