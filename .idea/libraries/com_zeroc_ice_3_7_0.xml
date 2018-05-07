@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="com.zeroc:ice:3.7.0" type="repository">
+    <properties maven-id="com.zeroc:ice:3.7.0" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/zeroc/ice/3.7.0/ice-3.7.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

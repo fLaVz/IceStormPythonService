@@ -18,9 +18,13 @@ import vlc
 
 class ServerI(mp3App.Function):
 
-    playList = ["test2.mp3"]
+    playList = []
     instance = vlc.Instance()
     player = instance.media_player_new()
+
+    def __init__(self):
+        print("server2 init")
+        self.receivePlaylist()
 
     def sendPlayList(self, seq, current=None):
         self.playList = seq

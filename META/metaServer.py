@@ -17,7 +17,6 @@ class MetaServerI(metaServer.msFunction):
     musicList = ["test1.mp3", "test2.mp3"]
 
     def __init__(self):
-        action = "init"
         print("init")
 
 
@@ -30,7 +29,6 @@ class MetaServerI(metaServer.msFunction):
             status = MetaServerI.run(self, communicator, action, data)
 
     def receive(self, current=None):
-        print("reveiveLOLOLOLOLOLOLOLOL")
         return self.musicList
 
     def run(self, communicator, action, data):
@@ -41,9 +39,7 @@ class MetaServerI(metaServer.msFunction):
             print("invalid proxy")
             sys.exit(1)
 
-        #
         # Retrieve the topic.
-        #
         try:
             topic = manager.retrieve(topicName)
         except IceStorm.NoSuchTopic:
@@ -53,19 +49,15 @@ class MetaServerI(metaServer.msFunction):
                 print("temporary error. try again")
                 sys.exit(1)
 
-
-        #
-        # Get the topic's publisher object, and create a Clock proxy with
-        # the mode specified as an argument of this application.
-        #
+        # Get the topic's publisher object, and create a proxy
         publisher = topic.getPublisher()
         publisher = publisher.ice_twoway()
         mp3 = mp3App.FunctionPrx.uncheckedCast(publisher)
 
+        # Handling actions
         try:
             if action == "init":
                 print("init")
-                self.musicList = ["test1", "test2"]
             elif action == "play":
                 mp3.playMusic(data)
             elif action == "stop":
@@ -77,12 +69,8 @@ class MetaServerI(metaServer.msFunction):
             pass
 
 # Ice.initialize returns an initialized Ice communicator,
-# the communicator is destroyed once it goes out of scope.
-
 # Launch icebox service
 # icebox --Ice.Config=config.icebox
-
-
 with Ice.initialize(sys.argv) as communicator:
     adapter = communicator.createObjectAdapterWithEndpoints("Function", "tcp -h 127.0.0.1 -p 4061")
     object = MetaServerI()

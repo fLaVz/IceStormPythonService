@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="com.zeroc:icestorm:3.7.1" type="repository">
+    <properties maven-id="com.zeroc:icestorm:3.7.1" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/zeroc/icestorm/3.7.1/icestorm-3.7.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/zeroc/ice/3.7.1/ice-3.7.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
