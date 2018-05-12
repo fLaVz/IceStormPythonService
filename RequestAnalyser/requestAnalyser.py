@@ -20,19 +20,20 @@ def process():
         )
 
 
-class Analyzer():
+class Analyzer:
 
+    actionlist = ['play', 'lire', 'jouer', 'joue', 'ecouter', 'écouter', 'run', 'launch', 'listen']
     action = "default"
     song = "default"
 
     def analyzeAction(self, phrase):
-        if "joue" in phrase:
-            self.action = "joue"
-        elif "play" in phrase:
-            self.action = "play"
-        else:
-            print("Phrase cannot be analyzed")
-        self.analyzeMusic(phrase)
+        for i in range(0, len(self.actionlist)):
+            if self.actionlist[i] in phrase:
+                self.action = self.actionlist[i]
+                self.analyzeMusic(phrase)
+                self.action = 'play'
+            else:
+                print("Phrase cannot be analyzed")
 
     def analyzeMusic(self, music):
         music = music.split(self.action + " ", 1)
@@ -43,6 +44,6 @@ class Analyzer():
         print(self.song)
 
         #server launch:
-        #export FLASK_APP=requestAnalyzer.py
+        #export FLASK_APP=requestAnalyzer.py or SET (windows)
         #flask run
         #curl --data "phrase=play California love" http://127.0.0.1:5000
