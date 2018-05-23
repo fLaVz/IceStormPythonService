@@ -20,20 +20,27 @@ import metaServer
 class MetaServerI(metaServer.msFunction):
 
     musicList = ["test1.mp3", "test2.mp3"]
+    jsondata = ""
 
     def __init__(self):
         print("init")
 
-    def parse(self, data, current=None):
+    def contactService(self, data):
         payload = {'phrase': data}
         response = requests.post("http://127.0.0.1:5000", data=payload)
         print(response.json())
-        jsondata = response.json()
+        self.jsondata = response.json()
 
-        print("parsing....  -> " + jsondata)
+    def parse(self, data, action, current=None):
+        if action == "json":
+            self.contactService(data)
+
+        print(self.jsondata)
+        print("parsing....")
+
 
         with Ice.initialize(sys.argv, "config.pub") as communicator:
-            MetaServerI.run(self, communicator, jsondata)
+            MetaServerI.run(self, communicator, self.jsondata)
 
     def receive(self, current=None):
         return self.musicList
@@ -66,7 +73,7 @@ class MetaServerI(metaServer.msFunction):
             if jsondata["action"] == "init":
                 print("init")
             elif jsondata["action"] == "play":
-                mp3.playMusic(jsondata["song"])
+                mp3.playMusic(jsondata["song"] + ".mp3")
             elif jsondata["action"] == "stop":
                 mp3.stopMusic()
 

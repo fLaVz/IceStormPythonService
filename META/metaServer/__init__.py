@@ -6,5 +6,6 @@ Ice.updateModule("metaServer")
 
 # Modules:
 import metaServer_ice
+import metaServer
 
 # Submodules:

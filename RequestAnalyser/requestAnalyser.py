@@ -32,6 +32,7 @@ class Analyzer:
                 self.action = self.actionlist[i]
                 self.analyzeMusic(phrase)
                 self.action = 'play'
+                print("Phrase is correct")
             else:
                 print("Phrase cannot be analyzed")
 
