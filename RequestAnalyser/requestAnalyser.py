@@ -23,6 +23,7 @@ def process():
 class Analyzer:
 
     actionlist = ['play', 'lire', 'jouer', 'joue', 'ecouter', 'écouter', 'run', 'launch', 'listen']
+    stoplist = ['stop', 'cancel', 'arrêter', 'arreter', 'arretes', "arrete"]
     action = "default"
     song = "default"
 
@@ -32,9 +33,15 @@ class Analyzer:
                 self.action = self.actionlist[i]
                 self.analyzeMusic(phrase)
                 self.action = 'play'
-                print("Phrase is correct")
+                print("Phrase is correct PLAY")
             else:
                 print("Phrase cannot be analyzed")
+
+        for i in range(0, len(self.stoplist)):
+            if self.stoplist[i] in phrase:
+                self.action = self.stoplist[i]
+                self.action = 'stop'
+                print("Phrase is correct STOP")
 
     def analyzeMusic(self, music):
         music = music.split(self.action + " ", 1)

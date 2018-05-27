@@ -20,7 +20,10 @@ import metaServer
 class MetaServerI(metaServer.msFunction):
 
     musicList = ["test1.mp3", "test2.mp3"]
-    jsondata = ""
+    jsondata = {
+        "action": "init",
+        "song": "emptyDefault"
+    }
 
     def __init__(self):
         print("init")
@@ -28,6 +31,7 @@ class MetaServerI(metaServer.msFunction):
     def contactService(self, data):
         payload = {'phrase': data}
         response = requests.post("http://127.0.0.1:5000", data=payload)
+        print("RESPONSE WEBSERVICE : ")
         print(response.json())
         self.jsondata = response.json()
 
@@ -35,17 +39,18 @@ class MetaServerI(metaServer.msFunction):
         if action == "json":
             self.contactService(data)
 
+        print("JSONDATA INFO : ")
         print(self.jsondata)
         print("parsing....")
 
 
         with Ice.initialize(sys.argv, "config.pub") as communicator:
-            MetaServerI.run(self, communicator, self.jsondata)
+            MetaServerI.run(self, communicator)
 
     def receive(self, current=None):
         return self.musicList
 
-    def run(self, communicator, jsondata):
+    def run(self, communicator):
 
         topicName = "mp3App"
         manager = IceStorm.TopicManagerPrx.checkedCast(communicator.propertyToProxy('TopicManager.Proxy'))
@@ -70,11 +75,11 @@ class MetaServerI(metaServer.msFunction):
 
         # Handling actions
         try:
-            if jsondata["action"] == "init":
+            if self.jsondata["action"] == "init":
                 print("init")
-            elif jsondata["action"] == "play":
-                mp3.playMusic(jsondata["song"] + ".mp3")
-            elif jsondata["action"] == "stop":
+            elif self.jsondata["action"] == "play":
+                mp3.playMusic(self.jsondata["song"] + ".mp3")
+            elif self.jsondata["action"] == "stop":
                 mp3.stopMusic()
 
         except IOError:
